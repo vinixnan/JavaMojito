@@ -1,0 +1,33 @@
+FROM vinixnan/javamojito:java21 AS javalib
+
+ARG libdir
+
+WORKDIR /code
+
+COPY ${libdir}/pom.xml /code/pom.xml
+RUN mvn -B -q -e -DskipTests dependency:go-offline
+
+COPY ${libdir}/ /code/
+RUN mvn -B -q -DskipTests package
+
+RUN mkdir -p /app && \
+    JAR=$( \
+      find /code/target -type f \( \
+        -name "*-runner.jar" -o \
+        -name "*jar-with-dependencies.jar" -o \
+        -name "*.jar" \
+      \) ! -name "original-*.jar" | head -n 1 \
+    ) && \
+    [ -n "$JAR" ] || (echo "No runnable jar found" && exit 1) && \
+    echo "Using jar: $JAR" && \
+    cp "$JAR" /app/app.jar
+
+RUN cp /code/target/classes/application.properties /app
+
+
+EXPOSE 8080
+
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]

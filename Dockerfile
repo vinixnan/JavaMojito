@@ -1,12 +1,15 @@
-FROM debian:12-slim AS base
+FROM debian:13-slim AS base
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV JAVA_HOME=/opt/jdk
 ENV PATH=$JAVA_HOME/bin:$PATH
-ARG JDK_VERSION=21
-ARG JDK_BUILD=35
-ARG MAVEN_VERSION=3.9.9
+ARG JDK_VERSION=25
+ARG JDK_BUILD=13
+ARG MAVEN_VERSION=3.9.12
 ARG YQ_VERSION=v4.2.0
+
+RUN rm -rf /var/lib/apt/lists/* && \
+    apt-get clean
 
 RUN apt-get update -q && apt install -q git wget gcc g++ gfortran libopenblas-dev liblapack-dev pkg-config ninja-build patchelf rename linux-perf nano build-essential zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev libsqlite3-dev wget libbz2-dev wget curl build-essential cmake libboost-context-dev libboost-program-options-dev libboost-filesystem-dev zlib1g-dev libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev libharfbuzz-dev libfribidi-dev libxcb1-dev -y
 

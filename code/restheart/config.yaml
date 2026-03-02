@@ -1,0 +1,15 @@
+framework:
+  website: restheart.org
+  version: 9.1
+
+  build:
+    - mvn package
+
+  binaries:
+    - etc/conf-overrides.yml
+    - target/benchmark.jar
+
+  files:
+    - etc/conf-overrides.yml
+
+  command: /usr/bin/java --sun-misc-unsafe-memory-access=allow -jar /opt/web/target/benchmark.jar -o /opt/web/etc/conf-overrides.yml

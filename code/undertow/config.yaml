@@ -1,0 +1,14 @@
+framework:
+  website: undertow.io
+  version: 2.3
+
+  build:
+    - mvn package
+
+  files:
+    - target/server-jar-with-dependencies.jar
+
+  binaries:
+    - target/server-jar-with-dependencies.jar
+
+  command: /usr/bin/java -jar /opt/web/target/server-jar-with-dependencies.jar
